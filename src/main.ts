@@ -21,7 +21,6 @@ async function main () {
 
     await consumerChannel.consume( rabbitConf.rabbitConsumerQueueName, async ( msg ) => {
         let infoVeiculo = JSON.parse( msg.content.toString() );
-
         let listaDeRegistros = await recuperaViagem( SqlConnection, infoVeiculo.viagem );
         let HistoricoReal = new Array();
         listaDeRegistros.forEach( historico => {
@@ -37,11 +36,15 @@ async function main () {
                 velocidade: historico.velocidade,
                 viagem_id: infoVeiculo.viagem
             }
+            //ajusta pra hora local
+            historia.datadecoleta.setUTCHours( historia.datadecoleta.getUTCHours() - 3 )
             HistoricoReal.push( historia );
             publishChannel.publish(
                 rabbitConf.rabbitTopicName,
                 rabbitConf.rabbitPublishRoutingKey,
-                new Buffer( JSON.stringify( HistoricoReal ) ),
+                new Buffer( JSON.stringify( {
+                    historicoReal: HistoricoReal
+                } ) ),
                 { persistent: false }
             );
         } );
