@@ -15,6 +15,7 @@ export async function getConsumerChannel (): Promise<amqp.Channel> {
         try {
             conn = await amqp.connect( conf.amqpOptions );
         } catch ( err ) {
+            console.log( conf )
             console.log( `[ getConsumerChannel ] Falha ao tentar se conectar ao rabbitMQ. ${err.message}` );
         }
         if ( conn ) {
