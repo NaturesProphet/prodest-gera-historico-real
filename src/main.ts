@@ -42,15 +42,16 @@ async function main () {
             //ajusta pra hora local
             historia.datadecoleta.setUTCHours( historia.datadecoleta.getUTCHours() - 3 )
             HistoricoReal.push( historia );
-            publishChannel.publish(
-                rabbitConf.rabbitTopicName,
-                rabbitConf.rabbitPublishRoutingKey,
-                new Buffer( JSON.stringify( {
-                    historicoReal: HistoricoReal
-                } ) ),
-                { persistent: false }
-            );
         } );
+        //console.log( HistoricoReal )
+        publishChannel.publish(
+            rabbitConf.rabbitTopicName,
+            rabbitConf.rabbitPublishRoutingKey,
+            new Buffer( JSON.stringify( {
+                historicoReal: HistoricoReal
+            } ) ),
+            { persistent: false }
+        );
         consumerChannel.ack( msg );
     } );
 }
