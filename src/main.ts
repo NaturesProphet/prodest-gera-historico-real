@@ -19,6 +19,9 @@ async function main () {
     const consumerChannel: Channel = await getConsumerChannel();
     const publishChannel: Channel = await getPublishChannel();
 
+    console.log( '\n-----------------------------------------------------------' );
+    console.log( `[ ${new Date().toString()} ]\nO Gerador de histórico real iniciou com sucesso!` );
+    console.log( '-----------------------------------------------------------\n\n' );
     await consumerChannel.consume( rabbitConf.rabbitConsumerQueueName, async ( msg ) => {
         let infoVeiculo = JSON.parse( msg.content.toString() );
         let listaDeRegistros = await recuperaViagem( SqlConnection, infoVeiculo.viagem );
