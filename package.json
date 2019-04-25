@@ -1,6 +1,6 @@
 {
   "name": "gera-historico-real",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Este serviço escuta no rabbit os veiculos que estão terminando uma viagem agora, faz um select na tabela de historico bruto com a viagem que temrinou, gerando assim o historico real registrado nessa viagem.",
   "main": "src/main.ts",
   "scripts": {
