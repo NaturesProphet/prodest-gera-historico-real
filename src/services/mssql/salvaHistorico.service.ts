@@ -7,7 +7,7 @@ import { Historico } from 'DTOs/Historico.interface';
 
 
 export async function salvaHistorico ( pool: ConnectionPool, viagem: Historico ): Promise<any> {
-    let Query = `INSERT INTO historico (datadecoleta, horarionoponto, `
+    let Query = `INSERT INTO historico_real (datadecoleta, horarionoponto, `
         + `pontofinal, pontoinicial, velocidade, veiculo, sequencia, `
         + `ponto_id, viagem_id, itinerario_id ) `
         + `VALUES ( '${viagem.datadecoleta.toISOString()}', '${viagem.horarionoponto.toISOString()}', `
