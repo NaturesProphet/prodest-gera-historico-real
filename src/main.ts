@@ -11,6 +11,7 @@ import * as rabbitConf from './common/rabbit.config';
 import { recuperaViagem } from './services/mssql/recuperaViagem.service';
 import { Historico } from './DTOs/Historico.interface';
 import { salvaHistorico } from './services/mssql/salvaHistorico.service';
+import { notifySlack } from './services/slack/notifications';
 
 
 
@@ -64,6 +65,10 @@ async function main () {
             //     } ) ),
             //     { persistent: false }
             // );
+        } else {
+            let msg = `[ GERA-HISTORICO-REAL ] chegaram viagens finalizadas na fila que não foram `
+                + `encontradas no banco. Verifique a sincronia dos dados.`
+            notifySlack( msg, "Nota" );
         }
 
         consumerChannel.ack( msg );
