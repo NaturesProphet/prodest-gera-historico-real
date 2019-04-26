@@ -29,41 +29,42 @@ async function main () {
         //let HistoricoReal = new Array();   //saida pro rabbit desativada
 
 
+        if ( listaDeRegistros != undefined && listaDeRegistros.length > 0 ) {
 
-        listaDeRegistros.forEach( historico => {
-            let historia: Historico = {
-                datadecoleta: new Date(),
-                horarionoponto: historico.datahora,
-                itinerario_id: historico.itinerario_id,
-                ponto_id: historico.ponto_id,
-                pontofinal: historico.pontoFinal,
-                pontoinicial: historico.pontoInicial,
-                sequencia: historico.sequencia,
-                veiculo: historico.veiculo,
-                velocidade: historico.velocidade,
-                viagem_id: infoVeiculo.viagem
-            }
-            //ajusta pra hora local
-            historia.datadecoleta.setUTCHours( historia.datadecoleta.getUTCHours() - 3 )
-            salvaHistorico( SqlConnection, historia ); //sem await pra ir mais rapido
+            listaDeRegistros.forEach( historico => {
+                let historia: Historico = {
+                    datadecoleta: new Date(),
+                    horarionoponto: historico.datahora,
+                    itinerario_id: historico.itinerario_id,
+                    ponto_id: historico.ponto_id,
+                    pontofinal: historico.pontoFinal,
+                    pontoinicial: historico.pontoInicial,
+                    sequencia: historico.sequencia,
+                    veiculo: historico.veiculo,
+                    velocidade: historico.velocidade,
+                    viagem_id: infoVeiculo.viagem
+                }
+                //ajusta pra hora local
+                historia.datadecoleta.setUTCHours( historia.datadecoleta.getUTCHours() - 3 )
+                salvaHistorico( SqlConnection, historia ); //sem await pra ir mais rapido
 
-            //HistoricoReal.push( historia ); //saida pro rabbit desativada
-        } );
-
-
+                //HistoricoReal.push( historia ); //saida pro rabbit desativada
+            } );
 
 
-        //saida pro rabbit desativada
 
-        // publishChannel.publish(
-        //     rabbitConf.rabbitTopicName,
-        //     rabbitConf.rabbitPublishRoutingKey,
-        //     new Buffer( JSON.stringify( {
-        //         historicoReal: HistoricoReal
-        //     } ) ),
-        //     { persistent: false }
-        // );
 
+            //saida pro rabbit desativada
+
+            // publishChannel.publish(
+            //     rabbitConf.rabbitTopicName,
+            //     rabbitConf.rabbitPublishRoutingKey,
+            //     new Buffer( JSON.stringify( {
+            //         historicoReal: HistoricoReal
+            //     } ) ),
+            //     { persistent: false }
+            // );
+        }
 
         consumerChannel.ack( msg );
     } );
