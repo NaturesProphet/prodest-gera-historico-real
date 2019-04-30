@@ -6,12 +6,13 @@ import { ConnectionPool } from 'mssql';
 import { Channel } from 'amqplib';
 import { iniciaConexaoSql } from './services/mssql/iniciaConexao.service';
 import { getConsumerChannel } from './services/rabbitmq/getConsumerChannel.service';
-//import { getPublishChannel } from './services/rabbitmq/getPublishChannel.service';
 import * as rabbitConf from './common/rabbit.config';
 import { recuperaViagem } from './services/mssql/recuperaViagem.service';
 import { Historico } from './DTOs/Historico.interface';
 import { salvaHistorico } from './services/mssql/salvaHistorico.service';
 import { notifySlack } from './services/slack/notifications';
+import { eliminaRedundancia } from 'services/utils/eliminaRedundancia.service';
+import { preencheSequenciasVazias } from 'services/utils/preencheSequenciasVazias.service';
 
 
 
@@ -19,7 +20,6 @@ async function main () {
 
     let SqlConnection: ConnectionPool = await iniciaConexaoSql();
     const consumerChannel: Channel = await getConsumerChannel();
-    //const publishChannel: Channel = await getPublishChannel(); //saida pro rabbit desativada
 
     console.log( '\n-----------------------------------------------------------' );
     console.log( `[ ${new Date().toString()} ]\nO Gerador de histórico real iniciou com sucesso!` );
@@ -27,10 +27,11 @@ async function main () {
     await consumerChannel.consume( rabbitConf.rabbitConsumerQueueName, async ( msg ) => {
         let infoVeiculo = JSON.parse( msg.content.toString() );
         let listaDeRegistros = await recuperaViagem( SqlConnection, infoVeiculo.viagem );
-        //let HistoricoReal = new Array();   //saida pro rabbit desativada
 
 
         if ( listaDeRegistros != undefined && listaDeRegistros.length > 0 ) {
+
+            let historias: Historico[] = new Array();
 
             listaDeRegistros.forEach( historico => {
                 let historia: Historico = {
@@ -46,25 +47,14 @@ async function main () {
                     viagem_id: infoVeiculo.viagem
                 }
                 //ajusta pra hora local
-                historia.datadecoleta.setUTCHours( historia.datadecoleta.getUTCHours() - 3 )
-                salvaHistorico( SqlConnection, historia ); //sem await pra ir mais rapido
-
-                //HistoricoReal.push( historia ); //saida pro rabbit desativada
+                historia.datadecoleta.setUTCHours( historia.datadecoleta.getUTCHours() - 3 );
+                historias.push( historia );
             } );
-
-
-
-
-            //saida pro rabbit desativada
-
-            // publishChannel.publish(
-            //     rabbitConf.rabbitTopicName,
-            //     rabbitConf.rabbitPublishRoutingKey,
-            //     new Buffer( JSON.stringify( {
-            //         historicoReal: HistoricoReal
-            //     } ) ),
-            //     { persistent: false }
-            // );
+            historias = eliminaRedundancia( historias );
+            historias = await preencheSequenciasVazias( SqlConnection, historias );
+            historias.forEach( element => {
+                salvaHistorico( SqlConnection, element );
+            } );
         } else {
             let msg = `[ GERA-HISTORICO-REAL ] chegaram viagens finalizadas na fila que não foram `
                 + `encontradas no banco. Verifique a sincronia dos dados.`
