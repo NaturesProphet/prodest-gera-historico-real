@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.3.0](https://gitlab.es.gov.br/espm/Transcol-Online/Realtime/gera-historico-real/compare/v0.2.0...v0.3.0) (2019-04-30)
+
+
+### Features
+
+* **Historias:** eliminação de redundancias e linearização das sequencias ([667c3b4](https://gitlab.es.gov.br/espm/Transcol-Online/Realtime/gera-historico-real/commit/667c3b4))
+
+
+
 # [0.2.0](https://gitlab.es.gov.br/espm/Transcol-Online/Realtime/gera-historico-real/compare/v0.1.4...v0.2.0) (2019-04-30)
 
 
