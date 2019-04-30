@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.2.0](https://gitlab.es.gov.br/espm/Transcol-Online/Realtime/gera-historico-real/compare/v0.1.4...v0.2.0) (2019-04-30)
+
+
+### Bug Fixes
+
+* **package.json:** request adicionado para o slack funcionar ([1e86c9f](https://gitlab.es.gov.br/espm/Transcol-Online/Realtime/gera-historico-real/commit/1e86c9f))
+
+
+### Features
+
+* **Slack:** notifications ([25b55ce](https://gitlab.es.gov.br/espm/Transcol-Online/Realtime/gera-historico-real/commit/25b55ce))
+
+
+
 ## [0.1.4](https://gitlab.es.gov.br/espm/Transcol-Online/Realtime/gera-historico-real/compare/v0.1.3...v0.1.4) (2019-04-26)
 
 
