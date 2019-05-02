@@ -15,9 +15,12 @@ export async function preencheSequenciasVazias
         dicionarioHistorias[ element.sequencia ] = element;
     } );
 
+
+
+
     for ( let index = 0; index < sequencias.length; index++ ) {
         if ( dicionarioHistorias[ index + 1 ] != undefined ) {
-            historicoLinearizado.push( historias[ index ] );
+            historicoLinearizado.push( dicionarioHistorias[ index + 1 ] );
         } else {
             let historiaFake: Historico = {
                 datadecoleta: historias[ 0 ].datadecoleta,

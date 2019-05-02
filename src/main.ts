@@ -52,13 +52,16 @@ async function main () {
             } );
             historias = eliminaRedundancia( historias );
             historias = await preencheSequenciasVazias( SqlConnection, historias );
-            historias.forEach( element => {
-                salvaHistorico( SqlConnection, element );
+
+
+            historias.forEach( historia => {
+                salvaHistorico( SqlConnection, historia );
             } );
+
         } else {
             let msg = `[ GERA-HISTORICO-REAL ] chegaram viagens finalizadas na fila que não foram `
                 + `encontradas no banco. Verifique a sincronia dos dados.`
-            notifySlack( msg, "Nota" );
+            notifySlack( msg, "Build" );
         }
 
         consumerChannel.ack( msg );

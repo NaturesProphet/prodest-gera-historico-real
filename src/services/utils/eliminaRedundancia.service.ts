@@ -4,10 +4,10 @@ export function eliminaRedundancia ( historias: Historico[] ): Historico[] {
 
     if ( historias.length > 1 ) {
 
-        let sequenciaAnterior: number = 0;
+        let sequenciaAnterior: number = -1;
         let historiasSemRedundancia: Historico[] = new Array();
 
-        for ( let index = 1; index < historias.length; index++ ) {
+        for ( let index = 0; index < historias.length; index++ ) {
             if ( historias[ index ].sequencia != sequenciaAnterior ) {
                 historiasSemRedundancia.push( historias[ index ] );
             }
