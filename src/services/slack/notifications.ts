@@ -30,6 +30,7 @@ export async function notifySlack ( message: string, name: string ): Promise<any
             console.log( `[  Nota  ] ${message}` );
             break;
         case "Build":
+            name = 'Gerador de Histórico Real'
             icon = ":build:";
             console.log( `[  Gerador  ] ${message}` );
             break;
